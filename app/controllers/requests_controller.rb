@@ -121,7 +121,7 @@ class RequestsController < ApplicationController
     case status
     when 'in_process'
       set_task
-      @task.update(status: 'completed')
+      @task&.update(status: 'completed', finished_at: Time.now)
       if analyse_tasks
         @request.update(status: 'completed')
         @log_entry = LogEntry.create(user_account: current_user_account, request: @request,

@@ -17,7 +17,7 @@
         </h3>
       </div>
 
-      <%= render partial: 'request_list', locals: { requests: @requests } %>
+      <%= render partial: 'request_list', locals: { requests: @requests , view: 'index' } %>
 
       <% if !@requests.nil? && @requests.size == 0 %>
         <p class="form__table form__table--empty"><i class="bi bi-info-circle"></i>&nbsp;&nbsp;No hay solicitudes para mostrar</p>

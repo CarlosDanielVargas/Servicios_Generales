@@ -36,14 +36,12 @@ class TasksController < ApplicationController
                else
                  Request.find(params[:request_id])
                end
-    if @request.tasks.empty?
-      Task.create(user_account_id: user.id, request_id: @request.id, status: 'admin')
-    end
+    Task.create(user_account_id: user.id, request_id: @request.id, status: 'admin') if @request.tasks.empty?
     @employees&.each do |user_account_id|
       task = Task.find_by(user_account_id:, request_id: @request.id)
       worker = UserAccount.find(user_account_id)
       if task.nil?
-        Task.create(user_account_id:, request_id: @request.id)
+        Task.create(user_account_id:, request_id: @request.id, assigned_at: Time.now)
         UserMailer.request_assigned(@request, worker).deliver_later
       else
         task.active = true
@@ -69,6 +67,7 @@ class TasksController < ApplicationController
     if params[:task][:observations].present? && params[:task][:observations][:description].present?
       description = params[:task][:observations][:description]
       if description.length.positive?
+        @task.update(started_at: Time.now) if @task.task_observations.empty?
         TaskObservation.create(task_id: @task.id, user_account: current_user_account,
                                description:)
       end
