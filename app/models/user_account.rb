@@ -48,4 +48,15 @@ class UserAccount < ApplicationRecord
   def active_requests
     requests.where(id: tasks.where(active: true, user_account_id: self.id).pluck(:request_id))
   end
+
+  def requests_by_tasks_status(tasks_status, not_request_status = nil)
+    if not_request_status
+      requests.where(id: tasks.where(active: true, user_account_id: self.id,
+                                     status: tasks_status).pluck(:request_id))
+              .where.not(status: not_request_status)
+    else
+      requests.where(id: tasks.where(active: true, user_account_id: self.id,
+                                     status: tasks_status).pluck(:request_id))
+    end
+  end
 end

@@ -18,6 +18,8 @@ class TasksController < ApplicationController
 
   # GET /tasks/edit
   def edit
+    @edit = params[:action] == "edit" ? true : false
+
     if current_user_account
       set_task
     else
@@ -34,17 +36,16 @@ class TasksController < ApplicationController
                else
                  Request.find(params[:request_id])
                end
-    if @request.tasks.empty?
-      Task.create(user_account_id: user.id, request_id: @request.id, status: 'admin')
-    end
+    Task.create(user_account_id: user.id, request_id: @request.id, status: 'admin') if @request.tasks.empty?
     @employees&.each do |user_account_id|
       task = Task.find_by(user_account_id:, request_id: @request.id)
       worker = UserAccount.find(user_account_id)
       if task.nil?
-        Task.create(user_account_id:, request_id: @request.id)
+        Task.create(user_account_id:, request_id: @request.id, assigned_at: Time.now)
         UserMailer.request_assigned(@request, worker).deliver_later
       else
         task.active = true
+        task.status = 'pending'
         task.save
         UserMailer.request_reassigned(@request, worker).deliver_later
       end
@@ -56,7 +57,7 @@ class TasksController < ApplicationController
       @request.update(status: 'in_process')
       @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
                                    entry_message: "#{user.name} cambió el estado de la solicitud a en proceso")
-      redirect_to requests_path
+      redirect_to (current_user_account.worker? ? requests_path(:status => "in_process") : requests_path(:status => "pending"))
     end
   end
 
@@ -66,6 +67,7 @@ class TasksController < ApplicationController
     if params[:task][:observations].present? && params[:task][:observations][:description].present?
       description = params[:task][:observations][:description]
       if description.length.positive?
+        @task.update(started_at: Time.now) if @task.task_observations.empty?
         TaskObservation.create(task_id: @task.id, user_account: current_user_account,
                                description:)
       end
@@ -74,6 +76,7 @@ class TasksController < ApplicationController
       @employees&.each do |user_account_id|
         task = Task.find_by(user_account_id:, request_id: @request.id)
         task.active = false
+        task.status = 'completed'
         task.save
         worker = UserAccount.find(user_account_id)
         UserMailer.request_removed(@request, worker).deliver_later

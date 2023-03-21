@@ -6,16 +6,20 @@
     <%= render @request %>
 
     <div class="button-group">
-      <% if !current_user_account && @request.status == "closed" %>
+      <% if !current_user_account && @request.status == "closed" && @feedback.nil? %>
         <%= link_to "Agregar retroalimentación", new_feedback_path(:request_id => @request.hashid), class: "form__button-submit" %>
       <% end %>
 
-      <% if current_user_account && @request.status == "closed" && !@feedback.nil? %>
+      <% if @request.status == "closed" && !@feedback.nil? %>
         <%= link_to "Ver retroalimentación", feedback_url(@feedback), class: "form__button-submit" %>
       <% end %>
 
       <% if @request.status == "pending" && current_user_account %>
-        <%= link_to "Atender", change_status_request_path(request), class: "form__button-submit" %>
+        <%= link_to "Atender", change_status_request_path(@request), class: "form__button-submit" %>
+      <% end %>
+
+      <% if @request.status == "in_process" && current_user_account.worker? %>
+        <%= link_to "Atender", edit_task_path(request: @request), class: "form__button-submit" %>
       <% end %>
 
       <%= link_to "Regresar", current_user_account ? :back : root_path, class: "form__button-back" %>

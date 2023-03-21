@@ -100,7 +100,7 @@
 
   <div class="form__input">
     <label for="location" class="form__input-label">Lugar del trabajo</label>
-    <input type="text" id="location" class="form__input-textfield" value="<%= request.request_location.work_building.name %>" disabled>
+    <input type="text" id="location" class="form__input-textfield" value="<%= request.request_location.name %>" disabled>
   </div>
 
   <div class="form__input">
@@ -113,6 +113,15 @@
   <label for="work_description" class="form__input-label">Descripción del trabajo</label>
   <textarea id="work_description" class="form__input-textarea" rows="6" disabled><%= request.work_description %></textarea>
 </div>
+
+<% if !@edit && !(request.task_observations).empty? %>
+  <hr class="mt-5 mb-3">
+  <h3 class="form__subheading fw-bold pb-4">Historial de observaciones</h3>
+     
+  <div class="form__input">
+    <%= render 'tasks/shared_views/observation_list' %>
+  </div>
+<% end %>
 
 <% if !request.log_entries.empty? && current_user_account %>
   <hr class="mt-5 mb-3">

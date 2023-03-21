@@ -5,7 +5,15 @@
       <th>Fecha</th>
       <th class="tablet-display">Edificio</th>
       <th class="desktop-display">Sitio</th>
-      <th class="desktop-display">Solicitante</th>
+      
+      <% if @commit %>
+        <th class="desktop-display">Estado</th>
+      <% end %>
+
+      <% if view && view == 'reports' %>
+        <th>Tiempo de atención</th>
+      <% end %>
+
       <th>Acciones</th>
     </tr>
   </thead>
@@ -18,7 +26,32 @@
           <td class="form__table-data"><%= request.created_at.strftime("%d/%m/%Y") %></td>
           <td class="form__table-data tablet-display"><%= request.request_location.work_building.name %></td>
           <td class="form__table-data desktop-display"><%= request.request_location.name %></td>
-          <td class="form__table-data desktop-display"><%= request.requester_name %></td>
+
+          <% if @commit %>
+            <td class="form__table-data desktop-display">
+              <% case request.status 
+                when "pending" %> Pendiente
+                <% when "in_process" %> En proceso
+                <% when "completed" %> Finalizada
+                <% when "closed" %> Cerrada
+                <% else %> Denegada
+              <% end %>
+            </td>
+          <% end %>
+
+          <% if view == 'reports' %>
+            <td class="form__table-data">
+              <% if request.status == "closed" || request.status == "completed" %>
+                <%= request.average_worked %> días
+              <% else %>
+                <% case request.status
+                   when "pending" %> <span class="text-danger">No aplica</span>
+                <% when "in_process" %> <span class="text-danger">No finalizada</span>
+                <% else %> <span class="text-danger">No aplica</span>
+                <% end %>
+              <% end %>
+            </td>
+          <% end %>
 
           <td class="form__table-data">
             <div class="form__table-buttons">
@@ -30,7 +63,7 @@
                 <i class="bi bi-eye"></i>
               <% end %>
               
-              <% if current_user_account.role == "admin" %>
+              <% if current_user_account.role == "admin" && !@commit %>
                 <%= render "requests/admin_views/admin_request_actions", request: request %>
               <% else %>
                 <%= render "requests/employee_views/employee_request_actions", request: request %>

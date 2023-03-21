@@ -53,4 +53,16 @@ class Request < ApplicationRecord
       )
     ).distinct
   end
+
+  def average_worked
+    max = 0
+    if tasks.where.not(finished_at: nil).pluck(:finished_at).max
+      max = tasks.where.not(finished_at: nil).pluck(:finished_at).max
+    end
+    min = 0
+    if tasks.where.not(started_at: nil).pluck(:started_at).min
+      min = tasks.where.not(started_at: nil).pluck(:started_at).min
+    end
+    ((max - min) / 1.day).round(2)
+  end
 end

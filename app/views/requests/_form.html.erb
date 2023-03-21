@@ -17,7 +17,7 @@
     <div class="grid-columns-2">
       <div class="form__input">
         <%= form.label "Dirección de correo electrónico", class: "form__input-label" %>
-        <%= form.text_field :requester_mail, placeholder: "Correo electrónico", class: "form__input-textfield" %>
+        <%= form.email_field :requester_mail, placeholder: "Correo electrónico", class: "form__input-textfield" %>
       </div>
 
       <div class="form__input">
@@ -34,7 +34,7 @@
 
       <div class="form__input">
         <%= form.label "Número telefónico", class: "form__input-label" %>
-        <%= form.text_field :requester_phone, placeholder: "Número telefónico", class: "form__input-textfield" %>
+        <%= form.number_field :requester_phone, placeholder: "Número telefónico", class: "form__input-textfield" %>
       </div>
 
       <div class="form__input">
