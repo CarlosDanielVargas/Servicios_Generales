@@ -25,7 +25,7 @@
     <%= f.hidden_field :request_id, value: request.id %>
     
     <div class="button-group flex-end mt-5">
-      <%= button_tag(class: "form__button-submit") do %>
+      <%= button_tag(class: "form__button-submit", id: list_type == "add" ? "btnAdd" : "btnRemove", data: {controller:"alert", action: "alert#confirm"} ) do %>
         <% if list_type == "add" %>
           Asignar trabajador(es)
         <% else %>

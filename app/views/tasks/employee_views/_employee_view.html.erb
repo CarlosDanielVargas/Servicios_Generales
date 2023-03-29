@@ -10,7 +10,7 @@
   <hr class="mt-5">
 
   <div class="button-group">
-    <%= link_to "Finalizar trabajo", change_status_request_path(@request, :task_id => @task), class: "form__button-toggle" %>
+    <%= link_to "Finalizar trabajo", change_status_request_path(@request, :task_id => @task), class: "form__button-toggle", data: {controller:"alert", action: "alert#confirm"} %>
     <%= link_to "Regresar", :back, class: "form__button-back" %>
   </div>
 </div>
