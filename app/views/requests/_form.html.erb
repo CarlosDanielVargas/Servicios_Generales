@@ -5,19 +5,19 @@
     <div class="grid-columns-2">
       <div class="form__input">
         <%= form.label "Número de identificación", class: "form__input-label" %>
-        <%= form.text_field :requester_id, placeholder: "Número de identificación", class: "form__input-textfield" %>
+        <%= form.text_field :requester_id, placeholder: "Número de identificación", class: "form__input-textfield", required: "true" %>
       </div>
 
       <div class="form__input">
         <%= form.label "Nombre completo", class: "form__input-label" %>
-        <%= form.text_field :requester_name, placeholder: "Nombre completo", class: "form__input-textfield" %>
+        <%= form.text_field :requester_name, placeholder: "Nombre completo", class: "form__input-textfield", required: "true" %>
       </div>
     </div>
 
     <div class="grid-columns-2">
       <div class="form__input">
         <%= form.label "Dirección de correo electrónico", class: "form__input-label" %>
-        <%= form.email_field :requester_mail, placeholder: "Correo electrónico", class: "form__input-textfield" %>
+        <%= form.email_field :requester_mail, placeholder: "Correo electrónico", class: "form__input-textfield", required: "true" %>
       </div>
 
       <div class="form__input">
@@ -40,7 +40,7 @@
 
       <div class="form__input">
         <%= form.label "Tipo de solicitante", class: "form__input-label" %>
-        <%= form.select :requester_type, options_for_select(@dictionary.requesterTypes.invert.each), {}, data: { select_target: "select", action: "select#select" }, class: "form__input-select" %>
+        <%= form.select :requester_type, options_for_select(@dictionary.requesterTypes.invert.each), {}, data: { select_target: "select", action: "select#select" }, class: "form__input-select"  %>
       </div>
     </div>
 
@@ -90,7 +90,7 @@
 
     <div class="form__input">
       <%= form.label "Descripción", class: "form__input-label" %>
-      <%= form.text_area :work_description, rows: "8", placeholder: "Agregar descripción", class: "form__input-textarea" %>
+      <%= form.text_area :work_description, rows: "8", placeholder: "Agregar descripción", class: "form__input-textarea", required: "true" %>
     </div>
 
     <div class="button-group">
