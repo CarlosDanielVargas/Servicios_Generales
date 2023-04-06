@@ -7,18 +7,13 @@ export default class extends Controller {
 
   validate(event) {
     const inputs = document.querySelectorAll(".input");
-    
-    var inputField = "";
-    inputs.forEach((input) => {
-      inputField = input.childNodes[3];
+    this.#updateInputs(inputs);
 
-      if (inputField.value) {
-        console.log(inputField);
-        inputField.classList.remove("invalid-input");
-      }
-    });
-
-    var values = "", displayStatus = "", input = "", childInputLabel = "", childInputValue = "";
+    var values = "",
+      input,
+      displayStatus,
+      childInputLabel,
+      childInputValue;
 
     for (var i = 0, j = 1; i < inputs.length; i++) {
       input = inputs[i];
@@ -27,9 +22,9 @@ export default class extends Controller {
 
       if (displayStatus == "block" && childInputValue === "") {
         childInputLabel = input.childNodes[1].innerHTML;
-        values += "\t  " + j + ") " + childInputLabel + "\n";
-        j++;
+        values += "\t  " + j + ") " + childInputLabel + "\n"; // '--> #) Label': Formato que se mostrara en el alert para los campos en blanco
         input.childNodes[3].classList.add("invalid-input");
+        j++;
       }
     }
 
@@ -37,5 +32,16 @@ export default class extends Controller {
       alert("Los siguientes campos quedaron vacíos y son necesarios para la creación de la solicitud: \n\n" + values); 
       event.preventDefault();
     }
+  }
+
+  #updateInputs(inputs) {
+    var inputField = "";
+    inputs.forEach((input) => {
+      inputField = input.childNodes[3];
+
+      if (inputField.value) {
+        inputField.classList.remove("invalid-input");
+      }
+    });
   }
 }
