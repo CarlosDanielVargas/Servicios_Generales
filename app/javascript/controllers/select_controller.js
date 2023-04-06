@@ -1,12 +1,13 @@
 import {Controller} from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["select", "hidden", "field"];
+    static targets = ["select", "hidden", "field", "studentid"];
     static classes = ["hidden"];
 
     connect() {
         this.addDefaultOption();
         this.hiddenTarget.hidden = true;
+        this.studentidTarget.style.display = "none";
     }
 
     select() {
@@ -14,8 +15,14 @@ export default class extends Controller {
         let lastOptionIndex = options.length - 1;
         let lastOptionValue = options.options[lastOptionIndex].value;
         if (options.selectedIndex === lastOptionIndex) {
+            if (options.id == "request_requester_type") {
+                this.studentidTarget.style.display = "block";
+            }
             this.hiddenTarget.hidden = false;
         } else {
+            if (options.id == "request_requester_type") {
+                this.studentidTarget.style.display = "none";
+            }
             this.hiddenTarget.hidden = true;
         }
         if (lastOptionValue.includes('other')) {
@@ -36,5 +43,4 @@ export default class extends Controller {
         option.disabled = true;
         dropdown.insertBefore(option, dropdown.firstChild);
     }
-
 }

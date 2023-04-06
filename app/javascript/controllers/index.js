@@ -18,3 +18,6 @@ application.register("nested-form", NestedFormController)
 
 import SelectController from "./select_controller"
 application.register("select", SelectController)
+
+import ValidateRequestController from "./validate_request_controller"
+application.register("validate-request", ValidateRequestController)

@@ -1,26 +1,26 @@
 <%= form_with(model: request) do |form| %>
-  <div data-controller="select" data-select-hidden-class="hidden">
+  <div data-controller="select validate-request" data-select-hidden-class="hidden">
     <h3 class="form__subheading">Información del solicitante</h3>
 
     <div class="grid-columns-2">
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Número de identificación", class: "form__input-label" %>
-        <%= form.text_field :requester_id, placeholder: "Número de identificación", class: "form__input-textfield", required: "true" %>
+        <%= form.text_field :requester_id, placeholder: "Número de identificación", class: "form__input-textfield", data: { action: "click->validate-request#onInputChange" } %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Nombre completo", class: "form__input-label" %>
         <%= form.text_field :requester_name, placeholder: "Nombre completo", class: "form__input-textfield", required: "true" %>
       </div>
     </div>
 
     <div class="grid-columns-2">
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Dirección de correo electrónico", class: "form__input-label" %>
         <%= form.email_field :requester_mail, placeholder: "Correo electrónico", class: "form__input-textfield", required: "true" %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Sede", class: "form__input-label" %>
         <%= form.hidden_field :campus_id, value: @campuses_list.first.id %>
         <input type="text" class="form__input-textfield" value="<%= @campuses_list.first.name %>" disabled>
@@ -28,29 +28,29 @@
     </div>  
 
     <div class="grid-columns-2-tablet grid-columns-3">
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Extensión telefónica", class: "form__input-label" %>
         <%= form.text_field :requester_extension, placeholder: "Ej: +506", class: "form__input-textfield" %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Número telefónico", class: "form__input-label" %>
         <%= form.number_field :requester_phone, placeholder: "Número telefónico", class: "form__input-textfield" %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Tipo de solicitante", class: "form__input-label" %>
         <%= form.select :requester_type, options_for_select(@dictionary.requesterTypes.invert.each), {}, data: { select_target: "select", action: "select#select" }, class: "form__input-select"  %>
       </div>
     </div>
 
     <div class="grid-columns-2" data-select-target="hidden">
-      <div class="form__input">
+      <div class="form__input input" data-select-target="studentid">
         <%= form.label "Carné del solicitante", class: "form__input-label" %>
         <%= form.text_field :student_id, placeholder: "Carné del solicitante", class: "form__input-textfield" %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Dependencia estudiantil", class: "form__input-label" %>
         <%= form.select :student_association, options_for_select(@dictionary.studentAssociations.invert.each), {}, class: "form__input-select" %>
       </div>
@@ -60,41 +60,41 @@
     <h3 class="form__subheading">Información del trabajo a solicitar</h3>
 
     <div data-controller="dropdown select" data-select-hidden-class="hidden" class="grid-columns-2">
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Edificio", class: "form__input-label" %>
         <%= form.select :work_building, "", {}, data: { action: "dropdown#workBuilding" }, class: "form__input-select" %>
       </div>
 
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Locación", class: "form__input-label" %>
         <%= form.select :work_location, "", {}, data: { select_target: "select", action: "select#select" }, class: "form__input-select" %>
       </div>
 
-      <div class="form__input" id="work_building" data-select-target="hidden">
+      <div class="form__input input" id="work_building" data-select-target="hidden">
         <%= form.label "Descripción del lugar", class: "form__input-label" %>
         <%= form.text_field :work_type, id: "work-type-field", data: { select_target: "field" }, placeholder: "Indique el tipo de trabajo", class: "form__input-textfield" %>
       </div>      
     </div>
 
     <div data-controller="select" data-select-hidden-class="hidden" class="grid-columns-2">
-      <div class="form__input">
+      <div class="form__input input">
         <%= form.label "Tipo de trabajo", class: "form__input-label" %>
         <%= form.select :work_type, options_for_select(@dictionary.workTypes.invert.each), {}, data: { select_target: "select", action: "select#select" }, class: "form__input-select" %>
       </div>
 
-      <div class="form__input" id="work_type" data-select-target="hidden">
+      <div class="form__input input" id="work_type" data-select-target="hidden">
         <%= form.label "Descripción del tipo de trabajo", class: "form__input-label" %>
         <%= form.text_field :work_type, id: "work-type-field", data: { select_target: "field" }, placeholder: "Indique el tipo de trabajo", class: "form__input-select" %>
       </div>
     </div>
 
-    <div class="form__input">
+    <div class="form__input input">
       <%= form.label "Descripción", class: "form__input-label" %>
       <%= form.text_area :work_description, rows: "8", placeholder: "Agregar descripción", class: "form__input-textarea", required: "true" %>
     </div>
 
     <div class="button-group">
-      <%= form.submit "Enviar solicitud", class: "form__button-submit" %>
+      <%= form.submit "Enviar solicitud", class: "form__button-submit", data: { action: "click->validate-request#validate" } %>
       <%= link_to "Regresar", root_path, class: "form__button-back" %>
     </div>
   </div>

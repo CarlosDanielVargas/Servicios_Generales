@@ -123,3 +123,11 @@
         display: grid;
     }
 }
+
+.invalid-input {
+    border: 1.5px solid v.$danger-color;
+
+    &::placeholder {
+        color: v.$danger-color;
+    }
+}
