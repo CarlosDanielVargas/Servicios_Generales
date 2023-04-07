@@ -9,7 +9,7 @@ export default class extends Controller {
     const inputs = document.querySelectorAll(".input");
     this.#updateInputs(inputs);
 
-    var values = "",
+    var emptyInputs = "",
       input,
       displayStatus,
       childInputLabel,
@@ -22,14 +22,14 @@ export default class extends Controller {
 
       if (displayStatus == "block" && childInputValue === "") {
         childInputLabel = input.childNodes[1].innerHTML;
-        values += "\t  " + j + ") " + childInputLabel + "\n"; // '--> #) Label': Formato que se mostrara en el alert para los campos en blanco
+        emptyInputs += `\t  ${j}) ${childInputLabel} \n`; // '--> #) Label': Formato que se mostrara en el alert para los campos en blanco
         input.childNodes[3].classList.add("invalid-input");
         j++;
       }
     }
 
-    if (values != "") {
-      alert("Los siguientes campos quedaron vacíos y son necesarios para la creación de la solicitud: \n\n" + values); 
+    if (emptyInputs != "") {
+      alert(`Los siguientes campos quedaron vacíos y son necesarios para la creación de la solicitud:\n\n${emptyInputs}`); 
       event.preventDefault();
     }
   }
