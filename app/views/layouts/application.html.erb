@@ -16,18 +16,16 @@
 
 <body>
   <div class="flex-wrapper bg-image" style="background-image: url(<%= asset_path('bg-image.jpg') %>);" id="background">
-      <%= render "shared/header" %>
-      <% if notice || alert %>
-        <%= render "layouts/devise_notifications" %>
-      <% end %>
-      <%= yield %>
-      <%= render "shared/footer" %>
-    </div>
+    <%= render "shared/header" %>
+    <%= render "shared/notifications" %>
+    <%= yield %>
+    <%= render "shared/footer" %>
+  </div>
 
-    <script>
-      if (window.location.href.charAt(window.location.href.length - 1) !== "/") {
-        document.getElementById("background").style.backgroundImage = "none";
-      }
-    </script>
+  <script>
+    if (window.location.href.charAt(window.location.href.length - 1) !== "/") {
+      document.getElementById("background").style.backgroundImage = "none";
+    }
+  </script>
 </body>
 </html>

@@ -3,16 +3,16 @@
 en:
   devise:
     confirmations:
-      confirmed: "Your email address has been successfully confirmed."
-      send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
-      send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
+      confirmed: "La dirección de correo electrónica ha sido confirmada exitosamente."
+      send_instructions: "En breve recibirá un correo electrónico con las instrucciones que debe seguir."
+      send_paranoid_instructions: "Si la dirección de correo electrónico está registrada en la base de datos, recibirá un correo con las instrucciones a seguir."
     failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
-      invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
+      already_authenticated: "Ya se encuentra autenticado en el sistema."
+      inactive: "La cuenta no ha sido activada todavía"
+      invalid: "Correo electrónico o contraseña inválida."
+      locked: "La cuenta se encuentra bloqueada"
       last_attempt: "You have one more attempt before your account is locked."
-      not_found_in_database: "Invalid %{authentication_keys} or password."
+      not_found_in_database: "Correo electrónico o contraseña inválida"
       timeout: "Your session expired. Please sign in again to continue."
       unauthenticated: "You need to sign in or sign up before continuing."
       unconfirmed: "You have to confirm your email address before continuing."
@@ -32,7 +32,7 @@ en:
       success: "Successfully authenticated from %{kind} account."
     passwords:
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
-      send_instructions: "You will receive an email with instructions on how to reset your password in a few minutes."
+      send_instructions: "En breve recibirá un correo electrónico con las instrucciones que debe seguir."
       send_paranoid_instructions: "If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes."
       updated: "Your password has been changed successfully. You are now signed in."
       updated_not_active: "Your password has been changed successfully."

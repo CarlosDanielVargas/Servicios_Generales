@@ -1,16 +1,7 @@
 <main class="main">
-    <div class="container">
-        <% if @request.errors.any? %>
-            <div style="color: red">
-            <h2><%= pluralize(@request.errors.count, "error") %> prohibited this request from being saved:</h2>
-            <ul>
-                <% @request.errors.each do |error| %>
-                <li><%= error.full_message %></li>
-                <% end %>
-            </ul>
-            </div>
-        <% end %>
-    </div>
+    <!--<div class="container">
+        <%= render 'shared/errors', obj: @request %>
+    </div>-->
 
     <div class="container form">
         <h1 class="form__heading">Nueva Solicitud</h1>

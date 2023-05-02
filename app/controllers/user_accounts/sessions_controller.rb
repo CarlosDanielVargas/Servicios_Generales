@@ -4,12 +4,15 @@ class UserAccounts::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
-  # def new
-  #  super
-  # end
+  def new
+   @user = UserAccount.new
+   super
+  end
 
   # POST /resource/sign_in
   def create
+    #byebug
+    @user = (UserAccount.all).find_by(email: params[:user_account][:email].downcase)
     super
   end
 

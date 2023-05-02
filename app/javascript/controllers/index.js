@@ -2,17 +2,22 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import {application} from "./application"
+import { application } from "./application"
+
+import AlertController from "./alert_controller"
+application.register("alert", AlertController)
 
 import DropdownController from "./dropdown_controller"
-import HelloController from "./hello_controller"
-import NestedFormController from "./nested_form_controller"
-import SelectController from "./select_controller"
-
 application.register("dropdown", DropdownController)
 
+import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import NestedFormController from "./nested_form_controller"
 application.register("nested-form", NestedFormController)
 
+import SelectController from "./select_controller"
 application.register("select", SelectController)
+
+import ValidateRequestController from "./validate_request_controller"
+application.register("validate-request", ValidateRequestController)
