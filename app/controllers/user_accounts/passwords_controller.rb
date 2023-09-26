@@ -18,6 +18,7 @@ class UserAccounts::PasswordsController < Devise::PasswordsController
 
   # PUT /resource/password
   def update
+    byebug
     super
   end
 

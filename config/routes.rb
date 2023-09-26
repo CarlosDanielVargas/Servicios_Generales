@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   devise_for :user_accounts, controllers: {
     sessions: "user_accounts/sessions",
     registrations: "user_accounts/registrations",
+    passwords: "user_accounts/passwords",
+    confirmations: "user_accounts/confirmations"
   }
 
   resources :user_accounts, only: %i[index show] do
