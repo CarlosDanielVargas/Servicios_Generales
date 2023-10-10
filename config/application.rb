@@ -20,6 +20,9 @@ module ServiciosGenerales
     config.active_record.default_timezone = :utc
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Locale I18n configuration
+    config.i18n.default_locale = :es
+
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'local_env.yml')
       if File.exists?(env_file)
