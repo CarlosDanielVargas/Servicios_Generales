@@ -61,12 +61,13 @@ class RequestsController < ApplicationController
   # If the request is not saved successfully, it renders the new request form and displays an error message.
   def create
     request_location = RequestLocation.new
+    last_request_id = Request.last.id
     @request = Request.new(request_params)
     campus = params[:request][:campus_id]
     @request.status = 'pending'
     @request.campus = Campus.find(campus)
-    date = Time.now.strftime('%d%m%Y')
-    @request.identifier = "#{@request.campus.campus_id}-#{date}-#{rand.to_s[2..6]}"
+    date = Time.now.strftime('%Y')
+    @request.identifier = "SG-#{last_request_id + 1}-#{date}"
     unless params[:request][:work_location_id] == '0'
       work_location = params[:request][:work_location].to_i
       request_location.work_building = WorkBuilding.find(params[:request][:work_building])

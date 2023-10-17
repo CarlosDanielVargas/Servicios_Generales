@@ -13,9 +13,10 @@ export default class extends Controller {
         this.selectedWorkBuilding = select.options[select.selectedIndex].text;
         this.removeOptionsFor("request_work_location")
         const workLocations = this.workBuildings[select.selectedIndex - 1].work_locations;
-        if (workLocations != null && workLocations.length > 0) {
+        console.log("aaaaaa")
+        //if (workLocations != null && workLocations.length > 0) {
             this.createOptionsFor("request_work_location", workLocations);
-        }
+        //}
     }
 
     fetchData(item, name = "name") {
@@ -39,7 +40,7 @@ export default class extends Controller {
         if (id === "request_work_location") {
             const option = document.createElement("option");
             option.text = "Otro";
-            option.value = "other";
+            option.value = "Otro";
             dropdown.appendChild(option);
         }
 
