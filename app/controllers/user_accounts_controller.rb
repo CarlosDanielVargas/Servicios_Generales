@@ -23,10 +23,11 @@ class UserAccountsController < ApplicationController
 
   def change_status
     status = @user_account.status
-    @user_account.status = status == 'Activo' ? 'Inactivo' : 'Activo'
-    @user_account.save
+    new_status = status == 'Activo' ? 'Inactivo' : 'Activo'
+    @user_account.update_attribute(:status, new_status)
     redirect_back_or_to employees_path(role: @user_account.role), notice: 'El estado del usuario ha sido cambiado'
   end
+
 
   private
 
