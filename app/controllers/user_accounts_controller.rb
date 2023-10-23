@@ -1,18 +1,24 @@
 class UserAccountsController < ApplicationController
+  # Pagination
+  require 'will_paginate/array'
+  # Before action methods
   before_action :set_role, only: %i[new index search]
   before_action :set_user_account, only: %i[show change_status]
 
+  # GET /user_accounts or /user_accounts.json
   def index
     if current_user_account && current_user_account.role == 'admin'
       @employees = UserAccount.where(campus: current_user_account.campus)
       employees_selected = @employees.where(role: @role)
       @query = employees_selected.ransack(params[:q])
       @employees = @query.result
+      @employees = @employees.all.paginate(page: params[:page], per_page: 7)
     else
       return_to_root('No tienes permisos para acceder a esta página')
     end
   end
 
+  # GET /user_accounts/new
   def search
     index
     render :index

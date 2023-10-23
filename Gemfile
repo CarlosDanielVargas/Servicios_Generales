@@ -4,94 +4,60 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Ruby version
 ruby "3.1.3"
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+# Rails version
 gem "rails", "~> 7.0.4"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+# Core Gems
+gem "puma", "~> 5.0" # Puma acts as the web server
+gem "sprockets-rails" # Sprockets-Rails is used for compiling and serving web assets
+gem "jbuilder" # JBuilder is used for building JSON APIs
+gem "tzinfo-data" # tzinfo-data provides daylight savings time data
+gem "bootsnap", require: false # Bootsnap speeds up boot times by caching expensive operations
 
-# Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+# JavaScript and CSS Bundling
+gem "jsbundling-rails" # JSBundling for JavaScript bundling
+gem "cssbundling-rails" # CSSBundling for CSS bundling
 
-# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-gem "jsbundling-rails"
+# Hotwire Gems
+gem "turbo-rails" # Turbo enhances navigation by making it faster
+gem "stimulus-rails" # Stimulus is a JavaScript framework
 
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+# Authentication
+gem "devise", "~> 4.8" # Devise for authentication
+gem 'devise-i18n' # Internationalization (i18n) for Devise
 
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails"
+# Search
+gem "ransack", "~> 3.2" # Ransack provides a simple search API
 
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem "cssbundling-rails"
+# Pagination
+gem "will_paginate" # WillPaginate for pagination
 
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# Miscellaneous Gems
+gem "ruby-lsp", "~> 0.0.3", :group => :development # Ruby-LSP for Language Server Protocol support
+gem "yard", "~> 0.9.28" # YARD for documentation generation
+gem "hashid-rails", "~> 1.4" # Hashid-Rails for generating unique IDs
+gem "rails_12factor", "~> 0.0.3" # Rails 12factor for making Rails more compatible with 12 factor apps
+gem "i18n_generators" # I18nGenerators for generating localization files
 
-# Use Redis adapter to run Action Cable in production
-# gem "redis", "~> 4.0"
-
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data"
-
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
-
-# Use Sass to process CSS
-# gem "sassc-rails"
-
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
+# Development and Test Gems
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
-
-  # Use sqlite3 as the database for Active Record
-  gem "sqlite3", "~> 1.4"
-
-  gem "rubocop"
+  gem "debug", platforms: %i[ mri mingw x64_mingw ] # Debug for debugging
+  gem "byebug", "~> 11.1" # Byebug for debugging
+  gem "sqlite3", "~> 1.4" # SQLite3 for the database
+  gem "rubocop" # Rubocop for Ruby code linting
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
-
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+  gem "web-console" # Web-Console for displaying a console in the browser
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  gem "capybara" # Capybara for integration testing
+  gem "selenium-webdriver" # Selenium-Webdriver for browser-based testing
+  gem "webdrivers" # Webdrivers for managing webdrivers needed for testing
 end
 
+# Production Gems
 group :production do
-  gem 'pg'
+  gem 'pg' # PostgreSQL for the database in production
 end
-
-gem "devise", "~> 4.8"
-
-gem "byebug", "~> 11.1"
-
-gem "ruby-lsp", "~> 0.0.3", :group => :development
-
-gem "ransack", "~> 3.2"
-
-gem "yard", "~> 0.9.28"
-
-gem "hashid-rails", "~> 1.4"
-
-gem "rails_12factor", "~> 0.0.3"
-
-gem "i18n_generators"
-
-gem 'devise-i18n'

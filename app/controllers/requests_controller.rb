@@ -3,6 +3,9 @@
 # RequestsController is responsible for managing requests in the application.
 # It provides actions to create, read, update, and delete requests.
 class RequestsController < ApplicationController
+  # The will_paginate/array gem is used to paginate arrays.
+  require 'will_paginate/array'
+
   # Before actions are used to set up necessary data before performing certain actions.
   before_action :set_request, only: %i[show edit update change_status]
   before_action :set_campuses_list, only: %i[new create]
@@ -23,6 +26,7 @@ class RequestsController < ApplicationController
 
       set_status
       set_requests
+      @requests = @requests.paginate(page: params[:page], per_page: 7)
     else
       return_to_root('No se poseen permisos para acceder a esta página')
     end
