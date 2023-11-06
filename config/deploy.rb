@@ -48,3 +48,36 @@ set :branch, :deploy
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+# Bundle
+namespace :bundle do
+  desc "Install the current Bundler environment."
+  task :install => [:default_config] do
+    on release_roles(fetch(:bundle_roles)) do
+      args = []
+      args << "--jobs #{fetch(:bundle_jobs)}" if fetch(:bundle_jobs)
+      args << "--path #{fetch(:bundle_path)}" if fetch(:bundle_path)
+      args << "--binstubs #{fetch(:bundle_binstubs)}" if fetch(:bundle_binstubs)
+      args << "--without #{fetch(:bundle_without)}" if fetch(:bundle_without)
+      args << "--gemfile #{fetch(:bundle_gemfile)}" if fetch(:bundle_gemfile)
+      args << "--deployment" if fetch(:bundle_deployment)
+      args << "--quiet" if fetch(:bundle_quiet)
+      args << "--retry #{fetch(:bundle_retry)}" if fetch(:bundle_retry)
+      args << "--clean" if fetch(:bundle_clean)
+      args << "--trust-policy" if fetch(:bundle_trust_policy)
+      args << "--frozen" if fetch(:bundle_frozen)
+      args << "--system" if fetch(:bundle_system)
+      args << "--shebang" << fetch(:bundle_shebang) if fetch(:bundle_shebang)
+      args << "--local" if fetch(:bundle_local)
+      args << "--standalone" if fetch(:bundle_standalone)
+      args << "--no-cache" if fetch(:bundle_no_cache)
+      args << "--no-prune" if fetch(:bundle_no_prune)
+      args << "--no-exe" if fetch(:bundle_no_exe)
+      args << "--gemfile #{fetch(:bundle_gemfile)}" if fetch(:bundle_gemfile)
+      args << "--with-pg-config=#{fetch(:pg_config)}"
+      args << "--with-pg-include=#{fetch(:pg_include)}"
+      args << "--with-pg-lib=#{fetch(:pg_lib)}"
+      execute :bundle, :install, *args
+    end
+  end
+end
