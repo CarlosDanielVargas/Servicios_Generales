@@ -47,8 +47,7 @@ gem 'capistrano-passenger' # Capistrano-Passenger for Passenger support
 
 # Production Gems
 group :production do
-  gem 'rack-timeout' # Rack-Timeout for timing out requests
-  gem 'pg', '~> 1.5', '>= 1.5.4' # PG for the database
+  gem 'pg' # PG for the database
 end
 # Development and Test Gems
 group :development, :test do
