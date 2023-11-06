@@ -42,5 +42,12 @@ require 'capistrano/rails'
 require 'capistrano/passenger'
 require 'capistrano/rbenv'
 
+# Configuration
+# Rbenv
 set :rbenv_type, :user
 set :rbenv_ruby, '3.1.3'
+
+# Pg
+set :pg_config, "/usr/pgsql-11/bin/pg_config"
+set :pg_include, "/usr/pgsql-11/include"
+set :pg_lib, "/usr/pgsql-11/lib"

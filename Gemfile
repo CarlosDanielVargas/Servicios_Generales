@@ -45,6 +45,11 @@ gem 'capistrano-rails' # Capistrano-Rails for Rails deployment
 gem 'capistrano-rbenv' # Capistrano-Rbenv for rbenv support
 gem 'capistrano-passenger' # Capistrano-Passenger for Passenger support
 
+# Production Gems
+group :production do
+  gem 'rack-timeout' # Rack-Timeout for timing out requests
+  gem 'pg', '~> 1.5', '>= 1.5.4' # PG for the database
+end
 # Development and Test Gems
 group :development, :test do
   gem 'debug', platforms: %i[ mri mingw x64_mingw ] # Debug for debugging
@@ -61,9 +66,4 @@ group :test do
   gem 'capybara' # Capybara for integration testing
   gem 'selenium-webdriver' # Selenium-Webdriver for browser-based testing
   gem 'webdrivers' # Webdrivers for managing webdrivers needed for testing
-end
-
-# Production Gems
-group :production do
-  gem 'pg' # PostgreSQL for the database in production
 end
