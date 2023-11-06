@@ -59,3 +59,18 @@ namespace :bundler do
     end
   end
 end
+
+before 'deploy:assets:precompile', 'deploy:load_credentials'
+
+namespace :deploy do
+  desc 'Load credentials'
+  task :load_credentials do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'rails:update_credentials'
+        end
+      end
+    end
+  end
+end
