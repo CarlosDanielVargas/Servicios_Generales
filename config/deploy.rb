@@ -15,6 +15,9 @@ set :keep_releases, 5
 # Change the default branch from :master to :deploy
 set :branch, :deploy
 
+# Link the master.key on the server
+set :linked_files, %w[config/master.key]
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -49,6 +52,7 @@ set :branch, :deploy
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
+# Bundler config
 namespace :bundler do
   before 'bundler:install', :config
   desc 'bundle config options'
@@ -60,17 +64,16 @@ namespace :bundler do
   end
 end
 
-before 'deploy:assets:precompile', 'deploy:load_credentials'
-
-namespace :deploy do
-  desc 'Load credentials'
-  task :load_credentials do
+# Config files
+namespace :config_files do
+  desc 'Upload yml files inside config folder'
+  task :upload do
     on roles(:app) do
-      within current_path do
-        with rails_env: fetch(:rails_env) do
-          execute :rake, 'rails:update_credentials'
-        end
-      end
+      execute "mkdir -p #{shared_path}/config"
+      upload! StringIO.new(File.read('config/master.key')), "#{shared_path}/config/master.key"
     end
   end
 end
+
+# Before hooks
+before 'deploy:starting', 'config_files:upload'
