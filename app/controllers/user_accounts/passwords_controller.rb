@@ -3,23 +3,58 @@
 class UserAccounts::PasswordsController < Devise::PasswordsController
   # GET /resource/password/new
   def new
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message, username:)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+    end
   end
 
   # POST /resource/password
   def create
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message, username:)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+    end
   end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   def edit
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message, username:)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+    end
   end
 
   # PUT /resource/password
   def update
-    byebug
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message, username:)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+    end
   end
 
   # protected

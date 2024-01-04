@@ -11,7 +11,6 @@ class UserAccounts::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    #byebug
     @user = (UserAccount.all).find_by(email: params[:user_account][:email].downcase)
     super
   end

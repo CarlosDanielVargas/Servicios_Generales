@@ -7,8 +7,17 @@ class LogEntriesController < ApplicationController
   # It then fetches all log entries where the request_id matches the id of the found request.
   # Finally, it sorts the log entries in descending order by their creation date, so the most recent entries appear first.
   def index
-    request = Request.find(params[:request_id])
-    @log_entries = LogEntry.all.where(request_id: request.id)
-    @log_entries = @log_entries.sort_by(&:created_at).reverse
+    begin
+      request = Request.find(params[:request_id])
+      @log_entries = LogEntry.all.where(request_id: request.id)
+      @log_entries = @log_entries.sort_by(&:created_at).reverse
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message, username:)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+    end
   end
 end
