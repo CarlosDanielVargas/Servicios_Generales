@@ -93,10 +93,7 @@ class RequestsController < ApplicationController
   def create
     begin
       request_location = RequestLocation.new
-      last_request_id = 0
-      unless Request.last.nil?
-        last_request_id = Request.last.id
-      end
+      last_request_id = Request.last.nil? ? 0 : Request.last.id
       @request = Request.new(request_params)
       campus = params[:request][:campus_id]
       @request.status = 'pending'
