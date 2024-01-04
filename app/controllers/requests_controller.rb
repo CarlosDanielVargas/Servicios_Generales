@@ -64,8 +64,9 @@ class RequestsController < ApplicationController
   # If the request is saved successfully, it sends an email, redirects to the request URL, and displays a success message.
   # If the request is not saved successfully, it renders the new request form and displays an error message.
   def create
+    byebug
     request_location = RequestLocation.new
-    last_request_id = Request.last.id
+    last_request_id = Request.last.nil? ? 0 : Request.last.id
     @request = Request.new(request_params)
     campus = params[:request][:campus_id]
     @request.status = 'pending'
@@ -83,6 +84,7 @@ class RequestsController < ApplicationController
         request_location.name = work_location.name
       end
     end
+    byebug
     respond_to do |format|
       if @request.save
         request_location.request = @request
