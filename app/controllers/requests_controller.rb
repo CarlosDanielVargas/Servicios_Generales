@@ -133,7 +133,7 @@ class RequestsController < ApplicationController
       else
         ErrorLog.create(code: e.class.name, description: e.message, username:)
       end
-      redirect_to new_request_path, notice: 'Hubo un error inesperado. Contacte al administrador del sistema.'
+      redirect_to new_request_path, alert: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end
   end
 
