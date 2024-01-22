@@ -6,9 +6,5 @@ class CreateRequestLocations < ActiveRecord::Migration[7.0]
       t.references :request, null: false, foreign_key: true
       t.timestamps
     end
-
-    change_table :requests do |t|
-      t.remove :work_location_id
-    end
   end
 end
