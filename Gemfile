@@ -58,6 +58,6 @@ group :test do
 end
 
 # Production Gems
-#group :production do
-#  gem 'pg' # PostgreSQL for the database in production
-#end
+group :production do
+  gem "mysql2" # MySQL2 for the database
+end
