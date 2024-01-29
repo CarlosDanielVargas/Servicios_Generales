@@ -155,6 +155,7 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
+    pg (1.5.4)
     prettier_print (1.2.1)
     psych (5.1.1.1)
       stringio
@@ -299,6 +300,7 @@ DEPENDENCIES
   i18n_generators
   jbuilder
   jsbundling-rails
+  pg
   puma (~> 5.0)
   rails (~> 7.0.4)
   rails_12factor (~> 0.0.3)
