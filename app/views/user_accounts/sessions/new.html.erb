@@ -1,16 +1,27 @@
 <main class="main">
+  <div class="container">
+    <%= render 'shared/errors', obj: @user %>
+
+    <% if @user.nil? || @user.errors.any? %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p class="my-auto">Incorrect email or password. Please try again.</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <% end %>
+  </div>
+
   <div class="container form form--mandala">
     <h1 class="form__heading--mandala">Ingreso al sistema</h1>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form__input--mandala">
         <%= f.label "Correo electrónico", class: "form__input-label" %>
-        <%= f.email_field :email, placeholder: "Correo electrónico", class: "form__input-textfield" %>
+        <%= f.email_field :email, placeholder: "Correo electrónico", class: "form__input-textfield", required: "true" %>
       </div>
 
       <div class="form__input--mandala">
         <%= f.label "Contraseña", class: "form__input-label" %>
-        <%= f.password_field :password, placeholder: "Contraseña", class: "form__input-textfield" %>
+        <%= f.password_field :password, placeholder: "Contraseña", class: "form__input-textfield", required: "true" %>
       </div>
 
       <% if devise_mapping.rememberable? %>

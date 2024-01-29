@@ -6,7 +6,6 @@ export default class extends Controller {
 
     connect() {
         this.fetchData("request_work_building");
-        console.log('Hola');
     }
 
     workBuilding(event) {
