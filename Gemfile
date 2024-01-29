@@ -59,5 +59,5 @@ end
 
 # Production Gems
 group :production do
-  gem "mysql2" # MySQL2 for the database
+  #  gem "mysql2" # MySQL2 for the database
 end
