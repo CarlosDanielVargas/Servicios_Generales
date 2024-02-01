@@ -18,13 +18,15 @@ class RequestsController < ApplicationController
   def index
     begin
       if current_user_account
-        @requests = []
         @requests = Request.where(campus: current_user_account.campus)
         @queries = @requests.ransack(params[:q])
-        @requests = @queries.result
+        @requests = @queries.result(distinct: true)
         @status = params[:status] if params[:status]
         @commit = params[:commit] # Para diferenciar la vista de la lista de solicitudes de reportes.
-        return if params[:q].present?
+        if params[:q].present?
+          @requests = @requests.paginate(page: params[:page], per_page: 7)
+          return
+        end
 
         set_status
         set_requests
@@ -46,6 +48,7 @@ class RequestsController < ApplicationController
   def search
     begin
       index
+
       render :reports
     rescue StandardError => e
       if current_user_account
