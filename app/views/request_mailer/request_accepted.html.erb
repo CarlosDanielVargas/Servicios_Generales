@@ -1,8 +1,16 @@
-<h1>Solicitud aceptada</h1>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @resource[:mail] %>,</h2>
 
-<p>
-  Este correo fue generado por el Sistema de Servicios Generales para indicar que su solicud fue aceptada.
-</p>
-<p>
-  Para observar el desarrollo de la solicitud, ingrese al siguiente enlace: <%= request_url(@request) %>
-</p>
+  <p style="font-size: 1.1em;">Esperamos que este mensaje le encuentre bien. Le informamos que su solicitud ha sido aceptada exitosamente.</p>
+
+  <p style="font-size: 1.1em;">Para seguir el progreso de su solicitud, por favor haga clic en el siguiente enlace:</p>
+
+  <p style="font-size: 1.1em;"><%= link_to 'Seguir progreso de solicitud', request_url(@request), style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y colaboración en este procedimiento.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>

@@ -1,7 +1,16 @@
-<h1>Solicitud creada</h1>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @resource[:mail] %>,</h2>
 
-<p>
-  Este correo fue generado por el Sistema de Servicios Generales para indicar que su solicud fue creada correctamente.
-  Para observar el estado de su solicitud, por favor ingrese a la siguiente dirección:
-  <%= request_url(@request) %>
-</p>
+  <p style="font-size: 1.1em;">Esperamos que este mensaje le encuentre bien. Le informamos que su solicitud ha sido creada exitosamente en el sistema de solicitudes de Servicios Generales.</p>
+
+  <p style="font-size: 1.1em;">Para seguir el estado de su solicitud, por favor haga clic en el siguiente enlace:</p>
+
+  <p style="font-size: 1.1em;"><%= link_to 'Seguir estado de solicitud', request_url(@request), style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y colaboración en este procedimiento.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>
