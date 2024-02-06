@@ -1,12 +1,16 @@
-<h1>Reasignado a solicitud</h1>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @worker.name %>,</h2>
 
-<p>
-  Hola <%= @worker.name %>, este correo fue generado para indicarle que se le ha asignado a la solicitud <%= @request.identifier %>.
-</p>
-<p>
-  Para ver la solicitud, ingrese al sistema y diríjase a la sección de solicitudes asignadas.
-</p>
-</br>
-<p>
-  <%= root_url %>
-</p>
+  <p style="font-size: 1.1em;">Esperamos que este mensaje le encuentre bien. Le informamos que se le ha asignado una nueva solicitud en el sistema de solicitudes de Servicios Generales con el identificador <%= @request.identifier %>.</p>
+
+  <p style="font-size: 1.1em;">Para visualizar la solicitud, por favor ingrese al sistema y dirija su atención a la sección de solicitudes asignadas.</p>
+
+  <p style="font-size: 1.1em;"><%= link_to 'Acceder al sistema', root_url, style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y colaboración en este procedimiento.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>

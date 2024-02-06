@@ -10,7 +10,7 @@
         <%= link_to "Agregar retroalimentación", new_feedback_path(:request_id => @request.hashid), class: "form__button-submit" %>
       <% end %>
 
-      <% if @request.status == "closed" && !@feedback.nil? %>
+      <% if @request.status == "closed" && !@feedback.nil? && (!current_user_account || (current_user_account.role == "admin")) %>
         <%= link_to "Ver retroalimentación", feedback_url(@feedback), class: "form__button-submit" %>
       <% end %>
 

@@ -7,6 +7,7 @@ class RequestMailer < ApplicationMailer
   #
   def new_request(request)
     @request = request
+    @resource = { mail: request.requester_mail }
 
     mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
   end
@@ -18,6 +19,7 @@ class RequestMailer < ApplicationMailer
   #
   def request_accepted(request)
     @request = request
+    @resource = { mail: request.requester_mail }
 
     mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
   end
@@ -29,6 +31,7 @@ class RequestMailer < ApplicationMailer
   #
   def request_denied(request)
     @request = request
+    @resource = { mail: request.requester_mail }
     @deny_reasons = RequestDenyReason.where(request_id: @request.id)
 
     mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
@@ -41,6 +44,7 @@ class RequestMailer < ApplicationMailer
   #
   def request_completed(request)
     @request = request
+    @resource = { mail: request.requester_mail }
 
     mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
   end
@@ -52,6 +56,7 @@ class RequestMailer < ApplicationMailer
   #
   def feedback_sent(request)
     @request = request
+    @resource = { mail: request.requester_mail }
 
     mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
   end

@@ -1,7 +1,16 @@
-<p>Bienvenido <%= @email %>!</p>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @email %>,</h2>
 
-<p>Se le ha resgistrado en el sistema solicitudes de Servicios Generales.</p>
+  <p style="font-size: 1.1em;">Nos complace informarle que se ha registrado exitosamente en nuestro sistema de Solicitudes de Servicios Generales de la Universidad de Costa Rica.</p>
 
-<p>Para confirmar su cuenta, por favor haga click en el siguiente enlace:</p>
+  <p style="font-size: 1.1em;">Para completar el proceso de registro y poder utilizar todas las funcionalidades del sistema, debe confirmar su cuenta. Para hacerlo, por favor haga clic en el siguiente enlace:</p>
 
-<p><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, confirmation_token: @token) %></p>
+  <p style="font-size: 1.1em;"><%= link_to 'Confirmar mi cuenta', confirmation_url(@resource, confirmation_token: @token), style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita ayuda, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su preferencia y esperamos que encuentre útil nuestra plataforma.</p>
+
+  <p style="font-size: 1.1em;">Saludos cordiales,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>

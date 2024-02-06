@@ -20,10 +20,13 @@ class RequestsController < ApplicationController
       if current_user_account
         @requests = Request.where(campus: current_user_account.campus)
         @queries = @requests.ransack(params[:q])
-        @requests = @queries.result
+        @requests = @queries.result(distinct: true)
         @status = params[:status] if params[:status]
         @commit = params[:commit] # Para diferenciar la vista de la lista de solicitudes de reportes.
-        return if params[:q].present?
+        if params[:q].present?
+          @requests = @requests.paginate(page: params[:page], per_page: 7)
+          return
+        end
 
         set_status
         set_requests
@@ -35,9 +38,9 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
@@ -45,14 +48,15 @@ class RequestsController < ApplicationController
   def search
     begin
       index
+
       render :reports
     rescue StandardError => e
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
@@ -70,9 +74,9 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
@@ -131,7 +135,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
       redirect_to new_request_path, alert: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end
@@ -167,12 +171,16 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
+  # This method is an alias for the `search` method and is used for generating reports.
+  def reports
+    search
+  end
   # The change_status action is used to update the status of a specific request.
   def change_status
     begin
@@ -211,7 +219,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account&.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
       redirect_to new_task_path(request: @request), notice: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end
@@ -420,10 +428,5 @@ class RequestsController < ApplicationController
   # The redirect path depends on whether the current user is a worker or not.
   def reload_index
     redirect_to (current_user_account.worker? ? requests_path(:status => "in_process") : requests_path(:status => "pending")), notice: 'Se actualizó el estado de la solicitud'
-  end
-
-  # This method is an alias for the `search` method and is used for generating reports.
-  def reports
-    search
   end
 end

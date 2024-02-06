@@ -1,7 +1,16 @@
-<p>¡Hola <%= @email %>!</p>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @resource.email %>,</h2>
 
-<% if @resource.try(:unconfirmed_email?) %>
-  <p>Te estamos contactando para informarte que tu correo electrónico está siendo cambiado a <%= @resource.unconfirmed_email %>.</p>
-<% else %>
-  <p>Te estamos contactando para informarte que tu correo electrónico ha sido cambiado a <%= @resource.email %>.</p>
-<% end %>
+  <% if @resource.try(:unconfirmed_email?) %>
+    <p style="font-size: 1.1em;">Le informamos que se ha iniciado un cambio en su dirección de correo electrónico. A partir de ahora, todos los correspondencias relacionadas con su cuenta serán enviados a <%= @resource.unconfirmed_email %>.</p>
+  <% else %>
+    <p style="font-size: 1.1em;">Le informamos que su dirección de correo electrónico ha sido actualizada a <%= @resource.email %>. Todos los correspondencias relacionadas con su cuenta a partir de ahora serán enviados a esta dirección.</p>
+  <% end %>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y colaboración en este procedimiento.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>
