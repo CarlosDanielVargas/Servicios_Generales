@@ -19,7 +19,7 @@ class FeedbacksController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message, username:)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
     end
