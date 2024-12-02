@@ -93,7 +93,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_200108) do
     t.datetime "updated_at", null: false
     t.integer "campus_id"
     t.string "identifier", null: false
+    t.integer "work_location_id"
     t.index ["campus_id"], name: "index_requests_on_campus_id"
+    t.index ["work_location_id"], name: "index_requests_on_work_location_id"
   end
 
   create_table "task_observations", force: :cascade do |t|
@@ -169,6 +171,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_200108) do
   add_foreign_key "request_locations", "work_buildings"
   add_foreign_key "request_locations", "work_locations"
   add_foreign_key "requests", "campus", column: "campus_id"
+  add_foreign_key "requests", "work_locations"
   add_foreign_key "task_observations", "tasks"
   add_foreign_key "task_observations", "user_accounts"
   add_foreign_key "tasks", "requests"
