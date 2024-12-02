@@ -75,14 +75,14 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
-    address: "smtp.gmail.com",
+    address: "smtp.ucr.ac.cr",
     port: 465,
     authentication: :login,
     user_name: ENV["MAIL_USERNAME"],
     password: ENV["MAIL_PASSWORD"],
     enable_starttls_auto: true,
-    openssl_verify_mode: 'none',
-    ssl: true,
-    tls: true
+    openssl_verify_mode: 'none', # This may be optional depending on your security requirements
+    ssl: true, # Changed to false because we're using STARTTLS instead of SSL/TLS directly
+    tls: true # This enables TLS encryption which is required for STARTTLS
   }
 end
