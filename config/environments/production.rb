@@ -12,7 +12,7 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   config.eager_load = true
 
-  config.hosts << 'servicios-generales-production.herokuapp.com'
+  config.hosts << 'osgticket.so.ucr.ac.cr'
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local = false
@@ -97,7 +97,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
-  host = 'servicios-generales-production.herokuapp.com'
+  host = 'osgticket.so.ucr.ac.cr'
   config.action_mailer.default_url_options = { host: host }
   config.action_mailer.default_options = { from: ENV["MAIL_USERNAME"] }
 

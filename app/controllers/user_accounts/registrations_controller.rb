@@ -28,7 +28,7 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
       else
         ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
@@ -47,7 +47,7 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
       else
         ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
@@ -61,7 +61,7 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
       else
         ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
-      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.')
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 

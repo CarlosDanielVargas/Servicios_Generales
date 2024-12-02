@@ -1,19 +1,20 @@
-<h1>Solicitud rechazada</h1>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @resource[:mail] %>,</h2>
 
-<p>
-  Este correo fue generado por el Sistema de Servicios Generales para indicar que su solicitud fue rechazada.
-</p>
-<p>
-  Las razones por las que fue rechazada son las siguientes:
-</p>
-<ul>
-  <% @deny_reasons.each do |dr| %>
-    <li><%= dr.reason %></li>
-  <% end %>
-</ul>
-<p>
-  Si cree que esto es un error, por favor comuníquese con el administrador del sistema.
-</p>
-<p>
-  Para observar más información ingrese al siguiente enlace: <%= request_url(@request) %>
-</p>
+  <p style="font-size: 1.1em;">Lamentamos informarle que su solicitud ha sido rechazada. A continuación, le detallamos las razones por las cuales la solicitud no fue aprobada:</p>
+
+  <ul style="font-size: 1.1em;">
+    <% @deny_reasons.each do |dr| %>
+      <li><%= dr.reason %></li>
+    <% end %>
+  </ul>
+
+  <p style="font-size: 1.1em;">Si considera que esta decisión es incorrecta, le agradecemos que se comunique con el administrador del sistema para obtener más información.</p>
+
+  <p style="font-size: 1.1em;"><%= link_to 'Ver más detalles', request_url(@request), style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y cooperación en este procedimiento.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>

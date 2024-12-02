@@ -5,14 +5,22 @@ class UserAccounts::SessionsController < Devise::SessionsController
 
   # GET /resource/sign_in
   def new
-   @user = UserAccount.new
-   super
+    @user = UserAccount.new
+    super
   end
 
   # POST /resource/sign_in
   def create
-    @user = (UserAccount.all).find_by(email: params[:user_account][:email].downcase)
-    super
+    user = (UserAccount.all).find_by(email: params[:user_account][:email].downcase)
+    if user&.valid_password?(params[:user_account][:password])
+      sign_in(user)
+      flash[:notice] = "Bienvenido #{user.name}"
+      redirect_to root_path
+    else
+      flash[:alert] = "Email o contraseña incorrectos"
+      redirect_to new_user_account_session_path
+    end
+    #super
   end
 
   # DELETE /resource/sign_out
