@@ -46,3 +46,7 @@
 /node_modules
 
 .byebug_history
+
+Gemfile.lock
+
+config/database.yml
