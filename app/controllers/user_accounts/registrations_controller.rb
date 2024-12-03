@@ -15,12 +15,18 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     begin
-      user = UserAccount.new(email: params[:user_account][:email], name: params[:user_account][:name],
-                             id_card: params[:user_account][:id_card], campus_id: Campus.first.id,
-                             role: params[:user_account][:role])
-      user.password = "Contra#{user.id_card}"
-      user.status = params[:user_account][:status] == 'Activo' ? 1 : 0
-      user.save
+      byebug
+      if URI.parse(params[:user_account][:email]).path.split('@').last.to_s == "ucr.ac.cr"
+        user = UserAccount.new(email: params[:user_account][:email], name: params[:user_account][:name],
+                               id_card: params[:user_account][:id_card], campus_id: Campus.first.id,
+                               role: params[:user_account][:role])
+        user.password = "Contra#{user.id_card}"
+        user.status = params[:user_account][:status] == 'Activo' ? 1 : 0
+        user.save
+        flash[:notice] = "El usuario #{user.name} fue creado correctamente"
+      else
+        flash[:alert] = 'Solo se permiten direcciones de correo electrónico @ucr.ac.cr'
+      end
       redirect_to root_path
     rescue StandardError => e
       if current_user_account
