@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_193005) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_04_200108) do
   create_table "campus", force: :cascade do |t|
     t.string "campus_id", null: false
     t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "error_logs", force: :cascade do |t|
+    t.string "code"
+    t.string "description", null: false
+    t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

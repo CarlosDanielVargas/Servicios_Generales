@@ -1,7 +1,18 @@
-<p>Hello <%= @resource.email %>!</p>
+<div style="background-color:#FFFFFF; padding: 20px;">
+  <h2 style="color: #004D9A;">Estimado/a <%= @resource.email %>,</h2>
 
-<p>Your account has been locked due to an excessive number of unsuccessful sign in attempts.</p>
+  <p style="font-size: 1.1em;">Lamentamos informarle que su cuenta ha sido temporalmente bloqueada debido a un número excesivo de intentos de inicio de sesión fallidos.</p>
 
-<p>Click the link below to unlock your account:</p>
+  <p style="font-size: 1.1em;">Esta medida de seguridad está destinada a proteger la integridad de su cuenta y sus datos personales.</p>
 
-<p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
+  <p style="font-size: 1.1em;">Para desbloquear su cuenta, por favor haga clic en el siguiente enlace:</p>
+
+  <p style="font-size: 1.1em;"><%= link_to 'Desbloquear mi cuenta', unlock_url(@resource, unlock_token: @token), style: "background-color: #004D9A; color: #FFFFFF; padding: 10px 20px; text-decoration: none;" %></p>
+
+  <p style="font-size: 1.1em;">Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nosotros.</p>
+
+  <p style="font-size: 1.1em;">Agradecemos su comprensión y colaboración en este procedimiento de seguridad.</p>
+
+  <p style="font-size: 1.1em;">Atentamente,</p>
+  <p style="font-size: 1.1em;">El equipo de Servicios Generales de la Universidad de Costa Rica</p>
+</div>

@@ -25,13 +25,13 @@ export default class extends Controller {
             }
             this.hiddenTarget.hidden = true;
         }
-        if (lastOptionValue.includes('other')) {
+        //if (lastOptionValue.includes('Otro')) {
             if (options.selectedIndex !== lastOptionIndex) {
                 this.fieldTarget.value = options.value;
             } else {
                 this.fieldTarget.value = "";
             }
-        }
+        //}
     }
 
     addDefaultOption() {

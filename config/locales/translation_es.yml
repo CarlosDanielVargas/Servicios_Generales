@@ -1,0 +1,118 @@
+es:
+  activerecord:
+    models:
+      campus: Instalaciones  #g
+      feedback: Comentario  #g
+      log_entry: Entrada de registro  #g
+      reopen_reason: Reabrir motivo  #g
+      request: Solicitud  #g
+      request_deny_reason: Motivo de denegación  #g
+      request_location: Ubicación de solicitud  #g
+      task: Tarea  #g
+      task_observation: Observación de tareas  #g
+      user_account: Cuenta de usuario  #g
+      work_building: edificio de trabajo  #g
+      work_location: Ubicación de trabajo  #g
+
+    attributes:
+      campus:
+        name: Nombre  #g
+        requests: Solicitudes  #g
+        user_accounts: Cuentas de usuario  #g
+        work_buildings: Edificios de trabajo  #g
+
+      feedback:
+        observations: Observaciones  #g
+        request: :activerecord.models.request  #g
+        satisfaction: Satisfacción  #g
+
+      log_entry:
+        entry_message: mensaje de entrada  #g
+        request: :activerecord.models.request  #g
+        user_account: :activerecord.models.user_account  #g
+
+      reopen_reason:
+        reason: Razón  #g
+        request: :activerecord.models.request  #g
+        user_account: :activerecord.models.user_account  #g
+
+      request:
+        campus: :activerecord.models.campus  #g
+        employees: Empleados  #g
+        feedback: :activerecord.models.feedback  #g
+        identifier: Identificador  #g
+        log_entries: Entradas de registro  #g
+        reopen_reasons: Motivos de reapertura  #g
+        request_deny_reasons: Motivos de denegación de solicitud  #g
+        request_location: :activerecord.models.request_location  #g
+        requester_extension: Extensión del solicitante  #g
+        requester_mail: Correo del solicitante  #g
+        requester_name: Nombre solicitante  #g
+        requester_phone: Teléfono del solicitante  #g
+        requester_type: Tipo de solicitante  #g
+        status: Estado  #g
+        student_association: Asociación de Estudiantes  #g
+        task_observations: Observaciones de tareas  #g
+        tasks: Tareas  #g
+        work_description: Descripción del trabajo  #g
+        work_type: Tipo de trabajo  #g
+
+      request_deny_reason:
+        reason: Razón  #g
+        request: :activerecord.models.request  #g
+        user_account: :activerecord.models.user_account  #g
+
+      request_location:
+        name: Nombre  #g
+        request: :activerecord.models.request  #g
+        work_building: :activerecord.models.work_building  #g
+        work_location: :activerecord.models.work_location  #g
+
+      task:
+        active: Activo  #g
+        assigned_at: Asignado en  #g
+        finished_at: Terminado en  #g
+        request: :activerecord.models.request  #g
+        started_at: Empezó a las  #g
+        status: Estado  #g
+        task_observations: Observaciones de tareas  #g
+        user_account: :activerecord.models.user_account  #g
+        user_accounts: Cuentas de usuario  #g
+
+      task_observation:
+        description: Descripción  #g
+        request: :activerecord.models.request  #g
+        task: :activerecord.models.task  #g
+        user_account: :activerecord.models.user_account  #g
+
+      user_account:
+        campus: :activerecord.models.campus  #g
+        confirmation_sent_at: Confirmación enviada a  #g
+        confirmation_token: Ficha de confirmación  #g
+        confirmed_at: Confirmado en  #g
+        email: Correo electrónico  #g
+        encrypted_password: Contraseña cifrada  #g
+        id_card: Tarjeta de identificación  #g
+        log_entries: Entradas de registro  #g
+        name: Nombre  #g
+        remember_created_at: Recuerda creado en  #g
+        reopen_reasons: Motivos de reapertura  #g
+        request_deny_reasons: Motivos de denegación de solicitud  #g
+        requests: Peticiones  #g
+        reset_password_sent_at: Restablecer contraseña enviada a  #g
+        reset_password_token: Restablecer token de contraseña  #g
+        role: Role  #g
+        status: Estado  #g
+        task_observations: Observaciones de tareas  #g
+        tasks: Tareas  #g
+
+      work_building:
+        campus: :activerecord.models.campus  #g
+        name: Nombre  #g
+        request_locations: Solicitar ubicaciones  #g
+        work_locations: Lugares de trabajo  #g
+
+      work_location:
+        name: Nombre  #g
+        request_locations: Solicitar ubicaciones  #g
+        work_building: :activerecord.models.work_building  #g

@@ -1,155 +1,234 @@
 # frozen_string_literal: true
 
+# RequestsController is responsible for managing requests in the application.
+# It provides actions to create, read, update, and delete requests.
 class RequestsController < ApplicationController
+  # The will_paginate/array gem is used to paginate arrays.
+  require 'will_paginate/array'
+
+  # Before actions are used to set up necessary data before performing certain actions.
   before_action :set_request, only: %i[show edit update change_status]
   before_action :set_campuses_list, only: %i[new create]
   before_action :set_dictionary, only: %i[new show edit update index create search]
   before_action :set_status, only: %i[show]
 
   # GET /requests or /requests.json
+  # The index action retrieves all requests associated with the current user's campus.
+  # It also handles search functionality.
   def index
-    if current_user_account
-      @requests = Request.where(campus: current_user_account.campus)
-      @queries = @requests.ransack(params[:q])
-      @requests = @queries.result
-      @status = params[:status] if params[:status]
-      @commit = params[:commit] # Para diferenciar la vista de la lista de solicitudes de reportes.
-      return if params[:q].present?
+    begin
+      if current_user_account
+        @requests = Request.where(campus: current_user_account.campus)
+        @queries = @requests.ransack(params[:q])
+        @requests = @queries.result(distinct: true)
+        @status = params[:status] if params[:status]
+        @commit = params[:commit] # Para diferenciar la vista de la lista de solicitudes de reportes.
+        if params[:q].present?
+          @requests = @requests.paginate(page: params[:page], per_page: 7)
+          return
+        end
 
-      set_status
-      set_requests
-    else
-      return_to_root('No se poseen permisos para acceder a esta página')
+        set_status
+        set_requests
+        @requests = @requests.paginate(page: params[:page], per_page: 7)
+      else
+        return_to_root('No se poseen permisos para acceder a esta página')
+      end
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
+  # The search action is used to render search results.
   def search
-    index
-    render :reports
+    begin
+      index
+
+      render :reports
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
+    end
   end
 
   # GET /requests/1 or /requests/1.json
+  # The show action retrieves and displays a specific request.
   def show
-    if @request.nil?
-      return_to_root('No se encontró la solicitud')
-      return
+    begin
+      if @request.nil?
+        return_to_root('No se encontró la solicitud')
+        return
+      end
+      @reasons = RequestDenyReason.where(request_id: @request.id) if @request.status == 'denied'
+      @feedback = Feedback.find_by(request_id: @request.id)
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
-    @reasons = RequestDenyReason.where(request_id: @request.id) if @request.status == 'denied'
-    @feedback = Feedback.find_by(request_id: @request.id)
   end
 
   # GET /requests/new
+  # The new action is used to instantiate a new request.
   def new
     @request = Request.new
   end
 
   # GET /requests/1/edit
+  # The edit action is used to find and display the edit form for a specific request.
   def edit; end
 
   # POST /requests or /requests.json
+  # The create action is used to create a new request.
+  # If the request is saved successfully, it sends an email, redirects to the request URL, and displays a success message.
+  # If the request is not saved successfully, it renders the new request form and displays an error message.
   def create
-    request_location = RequestLocation.new
-    @request = Request.new(request_params)
-    campus = params[:request][:campus_id]
-    @request.status = 'pending'
-    @request.campus = Campus.find(campus)
-    date = Time.now.strftime('%d%m%Y')
-    @request.identifier = "#{@request.campus.campus_id}-#{date}-#{rand.to_s[2..6]}"
-    unless params[:request][:work_location_id] == '0'
-      work_location = params[:request][:work_location].to_i
-      request_location.work_building = WorkBuilding.find(params[:request][:work_building])
-      if work_location.zero?
-        request_location.name = params[:request][:work_location]
-      else
-        work_location = WorkLocation.find(work_location)
-        request_location.work_location = work_location
-        request_location.name = work_location.name
-      end
-    end
-    respond_to do |format|
-      if @request.save
-        request_location.request = @request
-        request_location.save
-        RequestMailer.new_request(@request).deliver_later
-        admins = UserAccount.where(role: 'admin')
-        admins.each do |admin|
-          UserMailer.new_request_admin(@request, admin).deliver_later
+    begin
+      request_location = RequestLocation.new
+      last_request_id = Request.last.nil? ? 0 : Request.last.id
+      @request = Request.new(request_params)
+      campus = params[:request][:campus_id]
+      @request.status = 'pending'
+      @request.campus = Campus.find(campus)
+      date = Time.now.strftime('%Y')
+      @request.identifier = "SG-#{last_request_id + 1}-#{date}"
+      unless params[:request][:work_location_id] == '0'
+        work_location = params[:request][:work_location].to_i
+        request_location.work_building = WorkBuilding.find(params[:request][:work_building])
+        if work_location.zero?
+          request_location.name = params[:request][:work_location]
+        else
+          work_location = WorkLocation.find(work_location)
+          request_location.work_location = work_location
+          request_location.name = work_location.name
         end
-        format.html { redirect_to request_url(@request), notice: 'La solicitud fue creada correctamente.' }
-        format.json { render :show, status: :created, location: @request }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @request.errors, status: :unprocessable_entity }
       end
+      respond_to do |format|
+        if @request.save
+          request_location.request = @request
+          request_location.save
+          RequestMailer.new_request(@request).deliver_later
+          admins = UserAccount.where(role: 'admin')
+          admins.each do |admin|
+            UserMailer.new_request_admin(@request, admin).deliver_later
+          end
+          format.html { redirect_to request_url(@request), notice: 'La solicitud fue creada correctamente.' }
+          format.json { render :show, status: :created, location: @request }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @request.errors, status: :unprocessable_entity }
+        end
+      end
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      redirect_to new_request_path, alert: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end
   end
 
   # PATCH/PUT /requests/1 or /requests/1.json
-  # @return [Object]
+  # The update action is used to update a specific request.
+  # If the request is updated successfully, it redirects to the requests URL and displays a success message.
+  # If the request is not updated successfully, it renders the edit request form and displays an error message.
   def update
-    respond_to do |format|
-      reasons, type = get_reasons
-      if reasons.empty? || type.nil?
-        format.html { render :edit }
-        format.json { render json: @request.errors }
-      else
-        reasons = create_reasons(reasons, type)
-        workers = @request.employees_currently_working
-        workers.each do |worker|
-          task = Task.where(request: @request, user_account: worker).first
-          if task && type != 'deny'
-            task.update(status: 'pending')
-            task.save
+    begin
+      respond_to do |format|
+        reasons, type = get_reasons
+        if reasons.empty? || type.nil?
+          format.html { render :edit }
+          format.json { render json: @request.errors }
+        else
+          reasons = create_reasons(reasons, type)
+          workers = @request.employees_currently_working
+          workers.each do |worker|
+            task = Task.where(request: @request, user_account: worker).first
+            if task && type != 'deny'
+              task.update(status: 'pending')
+              task.save
+            end
+            UserMailer.request_reopened(@request, worker, reasons).deliver_later if type != 'deny'
           end
-          UserMailer.request_reopened(@request, worker, reasons).deliver_later if type != 'deny'
+          format.html { redirect_to (current_user_account.worker? ? requests_url(:status => "in_process") : requests_url(:status => "pending")), notice: 'Se actualizó el estado de la solicitud' }
+          format.json { head :no_content }
         end
-        format.html { redirect_to (current_user_account.worker? ? requests_url(:status => "in_process") : requests_url(:status => "pending")), notice: 'Se actualizó el estado de la solicitud' }
-        format.json { head :no_content }
       end
-    end
-  end
-
-  # In charge of updating the status of a request depending on the status obtained from the params
-  # @param [Object] request
-  # @param [nil] task
-  def change_status
-    if @task.nil?
-      user_account_id = current_user_account.id
-      @task = Task.where(request: @request, user_account_id:).first
-    end
-    status = @request.status
-    case status
-    when 'in_process'
-      set_task
-      @task&.update(status: 'completed', finished_at: Time.now)
-      if analyse_tasks
-        @request.update(status: 'completed')
-        @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
-                                     entry_message: 'Cambió el estado de la solicitud a completada')
-      end
-      reload_index
-    when 'completed'
-      if params[:change_to] == 'close'
-        @request.update(status: 'closed')
-        @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
-                                     entry_message: 'Cambió el estado de la solicitud a cerrada')
-        RequestMailer.request_completed(@request).deliver_now
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        reset_tasks
-        @request.update(status: 'in_process')
-        @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
-                                     entry_message: 'Cambió el estado de la solicitud a en proceso')
+        ErrorLog.create(code: e.class.name, description: e.message)
       end
-      reload_index
-    else
-      redirect_to new_task_path(request: @request)
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
   end
 
-  # Falta documentación
+  # This method is an alias for the `search` method and is used for generating reports.
+  def reports
+    search
+  end
+  # The change_status action is used to update the status of a specific request.
+  def change_status
+    begin
+      if @task.nil?
+        user_account_id = current_user_account.id
+        @task = Task.where(request: @request, user_account_id:).first
+      end
+      status = @request.status
+      case status
+      when 'in_process'
+        set_task
+        @task&.update(status: 'completed', finished_at: Time.now)
+        if analyse_tasks
+          @request.update(status: 'completed')
+          @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
+                                       entry_message: 'Cambió el estado de la solicitud a completada')
+        end
+        reload_index
+      when 'completed'
+        if params[:change_to] == 'close'
+          @request.update(status: 'closed')
+          @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
+                                       entry_message: 'Cambió el estado de la solicitud a cerrada')
+          RequestMailer.request_completed(@request).deliver_now
+        else
+          reset_tasks
+          @request.update(status: 'in_process')
+          @log_entry = LogEntry.create(user_account: current_user_account, request: @request,
+                                       entry_message: 'Cambió el estado de la solicitud a en proceso')
+        end
+        reload_index
+      else
+        redirect_to new_task_path(request: @request)
+      end
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account&.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      redirect_to new_task_path(request: @request), notice: 'Hubo un error inesperado. Contacte al administrador del sistema.'
+    end
+  end
+
+  # The ask_state action is used to ask for the state of a request.
   def ask_state; end
 
-  # Falta documentación
+  # The search_state action is used to search for the state of a request.
   def search_state
     # byebug
     if params[:session][:identifier] && params[:session][:requester_mail]
@@ -165,17 +244,18 @@ class RequestsController < ApplicationController
     end
   end
 
+  # The work_buildings action is used to fetch all work buildings and their associated work locations.
   def work_buildings
     work_buildings = WorkBuilding.all.order(name: :asc)
     render json: work_buildings.to_json(include: :work_locations)
   end
 
-  # Use callbacks to share common setup or constraints between actions.
+  # The set_request method is used to find a specific request before performing certain actions.
   def set_request
     @request = Request.find_by_hashid(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
+  # The request_params method is used to whitelist the permitted parameters.
   def request_params
     params.require(:request).permit(:identifier, :requester_name, :requester_extension, :requester_phone, :requester_id,
                                     :requester_mail, :requester_type, :student_id, :student_association, :campus_id,
@@ -187,23 +267,29 @@ class RequestsController < ApplicationController
 
   private
 
-  # Initializes the dictionary with the default values
+  # The set_dictionary method is used to initialize the dictionary with default values.
   def set_dictionary
     @dictionary = Dictionary.new
   end
 
-  # Initializes the list of campuses
+  # This method initializes the list of all campuses by querying the Campus model.
+  # The result of this query is stored in the instance variable @campuses_list
+  # which can be used in the views.
   def set_campuses_list
     @campuses_list = Campus.all
   end
 
-  # Initializes the status of a request
+  # This method initializes the status of a request by retrieving it from the request parameters.
+  # The status is stored in the @status instance variable.
   def set_status
     @status = params[:status]
   end
 
-  # Set the requests depending the user role and the status of the request
-  # @return [Object]
+  # This method sets the requests depending on the user role and the status of the request.
+  # If the current user is a worker, it fetches the active requests of the employee and filters
+  # them based on the status. If the current user is an admin, it fetches all requests associated
+  # with the admin's campus and filters them based on the status.
+  # The result is stored in the @requests instance variable.
   def set_requests
     # Case for the employee
     if current_user_account.role == 'worker'
@@ -236,14 +322,16 @@ class RequestsController < ApplicationController
     end
 
     @requests = case @status
-                when current_user_account.worker? ? 'in_process' : 'pending' 
+                when current_user_account.worker? ? 'in_process' : 'pending'
                   @requests
                 else
                   @requests.sort_by(&:created_at).reverse
                 end
   end
 
-  # Take the requests from given set: <b>set</b> depending the status: <b>status</b> of the request
+  # This method fetches requests from a given set based on the status.
+  # If the current user is a worker, it fetches requests based on the tasks status.
+  # Otherwise, it fetches requests directly based on the status.
   def find_requests(set, status)
     if current_user_account.role == 'worker'
       case status
@@ -259,7 +347,9 @@ class RequestsController < ApplicationController
     end
   end
 
-  # Takes the tasks from table <b>Task</b>
+  # This method fetches a task either by task_id from the request parameters or
+  # by finding the first task associated with the current user and request.
+  # The result is stored in the @task instance variable.
   def set_task
     @task = if params[:task_id]
               Task.find(params[:task_id])
@@ -268,7 +358,7 @@ class RequestsController < ApplicationController
             end
   end
 
-  # Sets the completed? attribute of the tasks of the request to false
+  # This method resets the status of all tasks associated with a request to 'pending'.
   def reset_tasks
     tasks = @request.tasks
     tasks.each do |task|
@@ -276,7 +366,8 @@ class RequestsController < ApplicationController
     end
   end
 
-  # Return the deny reasons of a request
+  # This method fetches the reasons for denying or reopening a request from the request parameters.
+  # It returns an array where the first element is the reasons and the second element is the type.
   def get_reasons
     reasons = []
     type = ''
@@ -290,10 +381,11 @@ class RequestsController < ApplicationController
     [reasons, type]
   end
 
-  # Creates the deny reasons or reopen reasons of a request
-  # @param [Object] reasons
-  # @param [Object] type
-  # @return [Array]
+  # This method creates the deny reasons or reopen reasons of a request.
+  # It iterates over the reasons, validates them, and creates the appropriate record in the database.
+  # If the type is 'deny', it also updates the status of the request to 'denied', creates a log entry, and sends an email notification.
+  # If the type is 'reopen', it updates the status of the request to 'in_process'.
+  # The method returns an array of valid reasons.
   def create_reasons(reasons, type)
     valid_reasons = []
     reasons.each do |reason|
@@ -321,8 +413,9 @@ class RequestsController < ApplicationController
     valid_reasons
   end
 
-  # Depending the value of the completed? attribute of the tasks of the current request,
-  # will return true if all the tasks are completed, or false if at least one task is not completed
+  # This method analyzes the tasks of the current request.
+  # It iterates over the tasks and returns false if it finds a task with the status 'pending'.
+  # If no such task is found, it returns true, indicating that all tasks are completed.
   def analyse_tasks
     tasks = @request.tasks
     tasks.each do |task|
@@ -331,12 +424,9 @@ class RequestsController < ApplicationController
     true
   end
 
-  # Reload the requests listing view, and informs the user that the request was successfully updated
+  # This method reloads the requests listing view and displays a success message indicating that the request was successfully updated.
+  # The redirect path depends on whether the current user is a worker or not.
   def reload_index
     redirect_to (current_user_account.worker? ? requests_path(:status => "in_process") : requests_path(:status => "pending")), notice: 'Se actualizó el estado de la solicitud'
-  end
-
-  def reports
-    search
   end
 end

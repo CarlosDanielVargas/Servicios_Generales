@@ -8,21 +8,28 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-
     @user_account = UserAccount.new
     @user_account.role = @role
   end
 
   # POST /resource
   def create
-
-    user = UserAccount.new(email: params[:user_account][:email], name: params[:user_account][:name],
-                           id_card: params[:user_account][:id_card], campus_id: Campus.first.id,
-                           role: params[:user_account][:role])
-    user.password = "Contra#{user.id_card}"
-    user.status = params[:user_account][:status] == 'Activo' ? 1 : 0
-    user.save
-    redirect_to root_path
+    begin
+      user = UserAccount.new(email: params[:user_account][:email], name: params[:user_account][:name],
+                             id_card: params[:user_account][:id_card], campus_id: Campus.first.id,
+                             role: params[:user_account][:role])
+      user.password = "Contra#{user.id_card}"
+      user.status = params[:user_account][:status] == 'Activo' ? 1 : 0
+      user.save
+      redirect_to root_path
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
+    end
   end
 
   # GET /resource/edit
@@ -32,13 +39,30 @@ class UserAccounts::RegistrationsController < Devise::RegistrationsController
 
   # PUT /resource
   def update
-
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
+    end
   end
 
   # DELETE /resource
   def destroy
-    super
+    begin
+      super
+    rescue StandardError => e
+      if current_user_account
+        ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
+      else
+        ErrorLog.create(code: e.class.name, description: e.message)
+      end
+      return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
+    end
   end
 
   # GET /resource/cancel

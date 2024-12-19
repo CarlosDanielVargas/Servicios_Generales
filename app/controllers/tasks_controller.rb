@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class TasksController < ApplicationController
+  # Pagination
+  require 'will_paginate/array'
+  # Before action methods
   before_action :set_request, only: %i[new edit]
   before_action :set_employees, only: %i[new edit]
   before_action :set_dictionary, only: %i[edit]
@@ -8,7 +11,7 @@ class TasksController < ApplicationController
 
   # GET /tasks or /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = Task.all.paginate(page: params[:page], per_page: 7)
   end
 
   # GET /tasks/new
