@@ -38,7 +38,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
@@ -48,13 +48,12 @@ class RequestsController < ApplicationController
   def search
     begin
       index
-
       render :reports
     rescue StandardError => e
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
@@ -74,7 +73,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
@@ -135,7 +134,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       redirect_to new_request_path, alert: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end
@@ -171,7 +170,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       return_to_root('Hubo un error inesperado. Contacte al administrador del sistema.', true)
     end
@@ -219,7 +218,7 @@ class RequestsController < ApplicationController
       if current_user_account
         ErrorLog.create(code: e.class.name, description: e.message, username: current_user_account&.email)
       else
-        ErrorLog.create(code: e.class.name, description: e.message)
+        ErrorLog.create(code: e.class.name, description: e.message, username: '')
       end
       redirect_to new_task_path(request: @request), notice: 'Hubo un error inesperado. Contacte al administrador del sistema.'
     end

@@ -123,7 +123,7 @@
   </div>
 <% end %>
 
-<% if !request.log_entries.empty? && current_user_account %>
+<% if !request.log_entries.empty? && current_user_account && current_user_account.role == "admin" %>
   <hr class="mt-5 mb-3">
   <h3 class="form__subheading fw-bold pb-4">Bitácora de cambios</h3>   
   <%= render 'requests/admin_views/request_log' %>

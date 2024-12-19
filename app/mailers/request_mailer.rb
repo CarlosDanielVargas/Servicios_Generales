@@ -1,5 +1,5 @@
 class RequestMailer < ApplicationMailer
-
+  helper :application # gives access to all helpers defined within `application_helper`.
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #
@@ -9,7 +9,7 @@ class RequestMailer < ApplicationMailer
     @request = request
     @resource = { mail: request.requester_mail }
 
-    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
+    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}", from: ENV["MAIL_USERNAME"]
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -21,7 +21,7 @@ class RequestMailer < ApplicationMailer
     @request = request
     @resource = { mail: request.requester_mail }
 
-    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
+    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}", from: ENV["MAIL_USERNAME"]
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -34,7 +34,7 @@ class RequestMailer < ApplicationMailer
     @resource = { mail: request.requester_mail }
     @deny_reasons = RequestDenyReason.where(request_id: @request.id)
 
-    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
+    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}", from: ENV["MAIL_USERNAME"]
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -46,7 +46,7 @@ class RequestMailer < ApplicationMailer
     @request = request
     @resource = { mail: request.requester_mail }
 
-    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
+    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}", from: ENV["MAIL_USERNAME"]
   end
 
   # Subject can be set in your I18n file at config/locales/en.yml
@@ -58,6 +58,6 @@ class RequestMailer < ApplicationMailer
     @request = request
     @resource = { mail: request.requester_mail }
 
-    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}"
+    mail to: request.requester_mail, subject: "Solicitud de servicio: #{request.identifier}", from: ENV["MAIL_USERNAME"]
   end
 end

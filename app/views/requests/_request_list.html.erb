@@ -75,5 +75,7 @@
     <% end %>
   </tbody>
 </table>
+<% if !@requests.nil? %>
+  <%= will_paginate @requests.blank? ? nil : @requests %>
+<% end %>
 
-<%= will_paginate @requests %>
